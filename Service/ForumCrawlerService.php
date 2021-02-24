@@ -13,8 +13,9 @@ class ForumCrawlerService implements CrawlerServiceInterface
     {
         $domDoc = new \DomDocument();
 
-        $domDoc->loadHTMLFile($url);
-
+        // $domDoc->loadHTMLFile($url);                     //сыпал предупреждения: Warning: DOMDocument::loadHTMLFile(): htmlParseEntityRef: expecting ';' 
+        @$domDoc->loadHTMLFile($url);                       // подавил их
+        
         $commentExpression = $config['xpath_comment_expression'];
 
         $commentTextExpression = $config['xpath_comment_text_expression'];
@@ -28,21 +29,23 @@ class ForumCrawlerService implements CrawlerServiceInterface
             echo "не нашел комментариев по заданному выражению!\n$commentExpression";
             return [];
         }
-
+        
         echo "I found {$elements->length} element(s)\n";
 
         $comments = [];
+        $i = 0;
 
         /** @var \DomNode $element */
         foreach ($elements as $element) {
-            $text = $xpath->query($commentTextExpression, $element)[0];
-            $author = $xpath->query($commentAuthorExpression, $element)[0];
+            $text = $xpath->query($commentTextExpression, $element)[$i];
+            $author = $xpath->query($commentAuthorExpression, $element)[$i];
             
             $comment = new Comment();
             $comment->setText($text->textContent);
             $comment->setAuthor($author->textContent);
-
+            
             $comments[] = $comment;
+            $i++;
         }
 
         return $comments;
