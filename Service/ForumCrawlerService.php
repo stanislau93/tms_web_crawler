@@ -33,21 +33,19 @@ class ForumCrawlerService implements CrawlerServiceInterface
         echo "I found {$elements->length} element(s)\n";
 
         $comments = [];
-        $i = 0;
-
+        
         /** @var \DomNode $element */
-        foreach ($elements as $element) {
-            $text = $xpath->query($commentTextExpression, $element)[$i];
-            $author = $xpath->query($commentAuthorExpression, $element)[$i];
+        foreach ($elements as $key => $element) {
+            $text = $xpath->query($commentTextExpression, $element)[$key];
+            $author = $xpath->query($commentAuthorExpression, $element)[$key];
             
             $comment = new Comment();
             $comment->setText($text->textContent);
             $comment->setAuthor($author->textContent);
             
             $comments[] = $comment;
-            $i++;
         }
-
+        
         return $comments;
     }
 }
