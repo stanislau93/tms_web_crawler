@@ -19,7 +19,7 @@ class FileStorageService implements StorageServiceInterface
         foreach ($comments as $key => $value) {            
             fwrite($handle, 'Пост № ' . $key + 1 . PHP_EOL); 
             fwrite($handle, 'Автор: ' . $value->getAuthor() . PHP_EOL); 
-            fwrite($handle, 'Сообшение: ' . $value->getText() . PHP_EOL . PHP_EOL);
+            fwrite($handle, 'Сообшение: ' . $value->getText() . PHP_EOL);
         }
 
         fclose($handle);        

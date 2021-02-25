@@ -30,8 +30,6 @@ class CommentController
         $comments = $this->crawlerService->crawl($request['url'], $config);
 
         echo "Автор третьего комментария:".$comments[2]->getAuthor();
-        
-        // $this->fileStorage->storeComments($comments);
 
         return $comments;
     }
