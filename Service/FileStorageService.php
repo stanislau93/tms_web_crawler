@@ -22,7 +22,6 @@ class FileStorageService implements StorageServiceInterface
             fwrite($handle, 'Сообшение: ' . $value->getText() . PHP_EOL . PHP_EOL);
         }
 
-        fclose($handle);
-        
+        fclose($handle);        
     }
 }

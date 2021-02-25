@@ -22,9 +22,9 @@ $request = [
 
 $controller = new CommentController();
 
-// $result = $controller->crawlPage($request);
+$result = $controller->crawlPage($request);
 
-$file = $controller->fileStorage($request);
+$file = $controller->fileStorage($result);
 
 // if ($result === 1) {
 //     echo "все получилось!";

@@ -36,10 +36,8 @@ class CommentController
         return $comments;
     }
 
-    public function fileStorage(array $request): void
+    public function fileStorage(array $comments): void
     {
-        $comments = $this->crawlPage($request);
-
         $this->fileStorage->storeComments($comments);
     }
     
