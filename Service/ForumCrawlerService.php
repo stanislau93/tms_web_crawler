@@ -12,12 +12,11 @@ class ForumCrawlerService implements CrawlerServiceInterface
     public function crawl(string $url, array $config): array
     {
         $domDoc = new \DomDocument();
-
-        // $domDoc->loadHTMLFile($url);                     //сыпал предупреждения: Warning: DOMDocument::loadHTMLFile(): htmlParseEntityRef: expecting ';' 
-        @$domDoc->loadHTMLFile($url);                       // подавил их
+        
+        @$domDoc->loadHTMLFile($url);                     
         
         $commentExpression = $config['xpath_comment_expression'];
-
+        
         $commentTextExpression = $config['xpath_comment_text_expression'];
         $commentAuthorExpression = $config['xpath_comment_author_expression'];
 
@@ -35,9 +34,9 @@ class ForumCrawlerService implements CrawlerServiceInterface
         $comments = [];
         
         /** @var \DomNode $element */
-        foreach ($elements as $key => $element) {
-            $text = $xpath->query($commentTextExpression, $element)[$key];
-            $author = $xpath->query($commentAuthorExpression, $element)[$key];
+        foreach ($elements as $element) {
+            $text = $xpath->query($commentTextExpression, $element)[0];
+            $author = $xpath->query($commentAuthorExpression, $element)[0];
             
             $comment = new Comment();
             $comment->setText($text->textContent);
