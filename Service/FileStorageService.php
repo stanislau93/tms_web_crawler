@@ -2,16 +2,17 @@
 
 namespace MyApp\Service;
 
+use Error;
+use Exception;
 
 class FileStorageService implements StorageServiceInterface
 {   
     public function storeComments(array $comments, string $file): void
-    {        
+    {  
         $handle = fopen($file, 'w');
 
         if ($handle === false) {
-            echo "Не могу открыть файл $file";
-            exit;
+            throw new Exception('Ошибка открытия файла');
         }
         
         foreach ($comments as $key => $value) {            
