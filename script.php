@@ -18,7 +18,17 @@ $request = [
     'comment_expression' => $_POST['comment_expression'],
     'comment_text_expression' => $_POST['comment_text_expression'],
     'comment_author_expression' => $_POST['comment_author_expression'],
+    'saveToFile' => 0,
+    'fileName' => 'ListComments',  
 ];
+
+if (isset($_POST['saveToFile'])) {
+    $request['saveToFile'] = 1;
+}
+
+if (!empty($_POST['fileName'])) {
+    $request['fileName'] = $_POST['fileName'];
+}
 
 // ТЕСТОВЫЕ ДАННЫЕ
 
@@ -33,4 +43,3 @@ $request = [
 $controller = new CommentController();
 
 $result = $controller->crawlPage($request);
-
