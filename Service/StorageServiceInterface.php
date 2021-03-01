@@ -4,5 +4,5 @@ namespace MyApp\Service;
 
 interface StorageServiceInterface
 {
-    public function storeComments(array $comments): void;
+    public function storeComments(array $comments, string $fileName): void;
 }

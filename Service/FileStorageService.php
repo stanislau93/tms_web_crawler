@@ -4,11 +4,9 @@ namespace MyApp\Service;
 
 
 class FileStorageService implements StorageServiceInterface
-{
-    public function storeComments(array $comments): void
-    {
-        $file = 'listComments.txt';
-
+{   
+    public function storeComments(array $comments, string $file): void
+    {        
         $handle = fopen($file, 'w');
 
         if ($handle === false) {
