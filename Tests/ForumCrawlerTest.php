@@ -2,43 +2,28 @@
 
 namespace App\Tests;
 
-use DOMDocument;
-use DOMXPath;
-use MyApp\Domain\Comment;
+use MyApp\Service\ForumCrawlerService;
 use PHPUnit\Framework\TestCase;
 
 final class ForumCrawlerTest extends TestCase 
-{
+{   
+    private ForumCrawlerService $crawl;
+
+    public function setUp(): void
+    {
+        $this->crawl = new ForumCrawlerService();
+    }
+
     public function testForumCrawler()
     {
-        $domDoc = new DOMDocument();
+        $url = 'tests/test.html';
+        $config = [
+            'xpath_comment_expression' => '//ul[@class="b-messages-thread"]/li[@id]',
+            'xpath_comment_text_expression' => './/div[@class="content"]',
+            'xpath_comment_author_expression' => './/big[starts-with(@class,"mtauthor-nickname userid")]//a[starts-with(@class,"_name")]',
+        ];
 
-        @$domDoc->loadHTMLFile('https://forum.onliner.by/viewtopic.php?t=19991115');
-
-        $this->assertNotFalse($domDoc);
-
-        $commentExpression = '//ul[@class="b-messages-thread"]/li[@id]';
-        $commentTextExpression = '//div[@class="content"]';
-        $commentAuthorExpression = '//big[starts-with(@class,"mtauthor-nickname userid")]//a[starts-with(@class,"_name")]';
-
-        $xpath = new DOMXPath($domDoc);
-
-        $elements = $xpath->query($commentExpression);
-        
-        $this->assertCount(20, $elements);
-
-        $comments = [];
-        
-        foreach ($elements as $key => $element) {
-            $text = $xpath->query($commentTextExpression, $element)[$key];
-            $author = $xpath->query($commentAuthorExpression, $element)[$key];
-            
-            $comment = new Comment();
-            $comment->setText($text->textContent);
-            $comment->setAuthor($author->textContent);           
-            
-            $comments[] = $comment;
-        }
+        $comments = $this->crawl->crawl($url, $config);
 
         $this->assertCount(20, $comments);
 
@@ -47,5 +32,5 @@ final class ForumCrawlerTest extends TestCase
         $this->assertEquals('86yzneR', $comments[5]->getAuthor());
         $this->assertEquals('Leo.mogilev', $comments[6]->getAuthor());
         $this->assertEquals('LittleOne', $comments[7]->getAuthor());
-    }    
+    }
 }
