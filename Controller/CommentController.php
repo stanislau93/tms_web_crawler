@@ -6,6 +6,7 @@ use MyApp\Service\CrawlerServiceInterface;
 use MyApp\Service\ForumCrawlerService;
 use MyApp\Service\FileStorageService;
 use MyApp\Service\StorageServiceInterface;
+use RuntimeException;
 
 class CommentController
 {
@@ -34,7 +35,18 @@ class CommentController
         echo "Автор третьего комментария:".$comments[2]->getAuthor();
         
         if ($config['saveToFile'] == 1) {
-            $this->fileStorage->storeComments($comments, $config['fileName']);
+            try {
+                $this->fileStorage->storeComments($comments, $config['fileName']);
+            } catch (RuntimeException $e) {
+                echo '<br>';
+                echo 'Ошибка: ' . $e->getMessage();
+                echo '<br>';
+                echo 'Файл: ' . $e->getFile();
+                echo '<br>';
+                echo 'Строка: ' . $e->getLine();
+                exit;
+            }
+            
         }
 
         return 1;
