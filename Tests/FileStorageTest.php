@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests;
+namespace MyApp\Tests;
 
 use MyApp\Domain\Comment;
 use MyApp\Service\FileStorageService;
@@ -8,8 +8,12 @@ use PHPUnit\Framework\TestCase;
 
 final class FileStorageTest extends TestCase 
 {   
+    /**
+     * @var Comment[]
+     */
     private array $comments;
-    private FileStorageService $file;
+
+    private FileStorageService $service;
 
     public function setUp(): void
     {
@@ -21,14 +25,15 @@ final class FileStorageTest extends TestCase
         $this->comments[1]->setAuthor('Nikola');
         $this->comments[1]->setText('Nikola\'s comment');
 
-        $this->file = new FileStorageService();
+        $this->service = new FileStorageService();
     }
     
     public function testStoreComments()
     {
-        $file = 'comments.txt';
-        $this->file->storeComments($this->comments, $file);
+        $result = $this->service->storeComments($this->comments);
 
-        $this->assertFileEquals($file, 'tests/testListCommentsForTest.txt');      
+        $this->assertFileEquals($result['file_name'], 'Tests/testListCommentsForTest.txt');
+        
+        unlink($result['file_name']);
     }
 }

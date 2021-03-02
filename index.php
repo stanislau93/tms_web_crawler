@@ -19,11 +19,6 @@
             COMMENTS' AUTHOR: <input type="text" name="comment_author_expression" value='.//big[starts-with(@class,"mtauthor-nickname userid")]//a[starts-with(@class,"_name")]' />
             <br/>
             <br/>
-            <input type="checkbox" id="file" name="saveToFile">
-            <label for="file">Save to file</label>            
-            <input type="text" name="fileName" placeholder="Enter file name" />
-            <br>
-            <br>
             <input type="submit" />
         </form>
     </body>

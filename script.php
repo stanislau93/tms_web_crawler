@@ -17,18 +17,8 @@ $request = [
     'url' => $_POST['url'],
     'comment_expression' => $_POST['comment_expression'],
     'comment_text_expression' => $_POST['comment_text_expression'],
-    'comment_author_expression' => $_POST['comment_author_expression'],
-    'saveToFile' => 0,
-    'fileName' => 'ListComments',  
+    'comment_author_expression' => $_POST['comment_author_expression']
 ];
-
-if (isset($_POST['saveToFile'])) {
-    $request['saveToFile'] = 1;
-}
-
-if (!empty($_POST['fileName'])) {
-    $request['fileName'] = $_POST['fileName'];
-}
 
 // ТЕСТОВЫЕ ДАННЫЕ
 
@@ -39,7 +29,6 @@ if (!empty($_POST['fileName'])) {
 //     'comment_author_expression' => './/big[starts-with(@class,"mtauthor-nickname userid")]//a[starts-with(@class,"_name")]',
 // ];
 
-
-$controller = new CommentController();
+$controller = new CommentController(new ForumCrawlerService(), new FileStorageService());
 
 $result = $controller->crawlPage($request);

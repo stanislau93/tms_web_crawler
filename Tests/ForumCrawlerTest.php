@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests;
+namespace MyApp\Tests;
 
 use MyApp\Service\ForumCrawlerService;
 use PHPUnit\Framework\TestCase;
@@ -14,9 +14,10 @@ final class ForumCrawlerTest extends TestCase
         $this->crawl = new ForumCrawlerService();
     }
 
-    public function testForumCrawler()
+    public function testCrawl()
     {
-        $url = 'tests/test.html';
+        $url = 'Tests/test.html';
+
         $config = [
             'xpath_comment_expression' => '//ul[@class="b-messages-thread"]/li[@id]',
             'xpath_comment_text_expression' => './/div[@class="content"]',
