@@ -17,7 +17,7 @@ $request = [
     'url' => $_POST['url'],
     'comment_expression' => $_POST['comment_expression'],
     'comment_text_expression' => $_POST['comment_text_expression'],
-    'comment_author_expression' => $_POST['comment_author_expression'],
+    'comment_author_expression' => $_POST['comment_author_expression']
 ];
 
 // ТЕСТОВЫЕ ДАННЫЕ
@@ -29,7 +29,6 @@ $request = [
 //     'comment_author_expression' => './/big[starts-with(@class,"mtauthor-nickname userid")]//a[starts-with(@class,"_name")]',
 // ];
 
-$controller = new CommentController();
+$controller = new CommentController(new ForumCrawlerService(), new FileStorageService());
 
 $result = $controller->crawlPage($request);
-

@@ -12,11 +12,11 @@ class ForumCrawlerService implements CrawlerServiceInterface
     public function crawl(string $url, array $config): array
     {
         $domDoc = new \DomDocument();
-
-        $domDoc->loadHTMLFile($url);
-
+        
+        @$domDoc->loadHTMLFile($url);                     
+        
         $commentExpression = $config['xpath_comment_expression'];
-
+        
         $commentTextExpression = $config['xpath_comment_text_expression'];
         $commentAuthorExpression = $config['xpath_comment_author_expression'];
 
@@ -28,11 +28,11 @@ class ForumCrawlerService implements CrawlerServiceInterface
             echo "не нашел комментариев по заданному выражению!\n$commentExpression";
             return [];
         }
-
+        
         echo "I found {$elements->length} element(s)\n";
 
         $comments = [];
-
+        
         /** @var \DomNode $element */
         foreach ($elements as $element) {
             $text = $xpath->query($commentTextExpression, $element)[0];
@@ -41,10 +41,10 @@ class ForumCrawlerService implements CrawlerServiceInterface
             $comment = new Comment();
             $comment->setText($text->textContent);
             $comment->setAuthor($author->textContent);
-
+            
             $comments[] = $comment;
         }
-
+        
         return $comments;
     }
 }

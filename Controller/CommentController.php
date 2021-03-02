@@ -3,15 +3,18 @@
 namespace MyApp\Controller;
 
 use MyApp\Service\CrawlerServiceInterface;
-use MyApp\Service\ForumCrawlerService;
+use MyApp\Service\StorageServiceInterface;
+use RuntimeException;
 
 class CommentController
 {
     private CrawlerServiceInterface $crawlerService;
+    private StorageServiceInterface $fileStorage;
 
-    public function __construct()
+    public function __construct(CrawlerServiceInterface $crawlerService, StorageServiceInterface $fileStorage)
     {
-        $this->crawlerService = new ForumCrawlerService();
+        $this->crawlerService = $crawlerService;
+        $this->fileStorage = $fileStorage;
     }
 
     public function crawlPage(array $request): int
@@ -26,7 +29,20 @@ class CommentController
         $comments = $this->crawlerService->crawl($request['url'], $config);
 
         echo "Автор третьего комментария:".$comments[2]->getAuthor();
+        
+        try {
+            $result = $this->fileStorage->storeComments($comments);
+        } catch (Throwable $e) {
+            echo '<br>';
+            echo 'Ошибка: ' . $e->getMessage();
+            echo '<br>';
+            echo 'Файл: ' . $e->getFile();
+            echo '<br>';
+            echo 'Строка: ' . $e->getLine();
 
-        return 1;
+            return 0;
+        }
+
+        return $result;
     }
 }
