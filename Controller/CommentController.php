@@ -4,7 +4,7 @@ namespace MyApp\Controller;
 
 use MyApp\Service\CrawlerServiceInterface;
 use MyApp\Service\StorageServiceInterface;
-use RuntimeException;
+use Throwable;
 
 class CommentController
 {
@@ -17,7 +17,7 @@ class CommentController
         $this->fileStorage = $fileStorage;
     }
 
-    public function crawlPage(array $request): int
+    public function crawlPage(array $request): array
     {
         $config = [
             'xpath_comment_expression' => $request['comment_expression'],

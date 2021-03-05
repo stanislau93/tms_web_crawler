@@ -3,6 +3,8 @@
 require_once __DIR__.'/vendor/autoload.php';
 
 use MyApp\Controller\CommentController;
+use MyApp\Service\ForumCrawlerService;
+use MyApp\Service\FileStorageService;
 
 
 if ($_POST['comment_text_expression'][0] != '.') {
