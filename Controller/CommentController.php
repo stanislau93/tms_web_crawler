@@ -2,19 +2,28 @@
 
 namespace MyApp\Controller;
 
-use MyApp\Service\CrawlerServiceInterface;
+use MyApp\Service\CrawlerServiceFactory;
 use MyApp\Service\StorageServiceInterface;
 use Throwable;
 
 class CommentController
 {
-    private CrawlerServiceInterface $crawlerService;
+    private CrawlerServiceFactory $crawlerServiceFactory;
     private StorageServiceInterface $fileStorage;
 
-    public function __construct(CrawlerServiceInterface $crawlerService, StorageServiceInterface $fileStorage)
+    public function __construct(CrawlerServiceFactory $crawlerServiceFactory, StorageServiceInterface $fileStorage)
     {
-        $this->crawlerService = $crawlerService;
+        $this->crawlerServiceFactory = $crawlerServiceFactory;
         $this->fileStorage = $fileStorage;
+    }
+
+    public function crawlRedditPage(array $request)
+    {
+        $crawlerService = $this->crawlerServiceFactory->getInstance($request['type']);
+        $comments = $crawlerService->crawl($request['url'], $request);
+
+        $result = $this->fileStorage->storeComments($comments);
+        echo 'Сделано!';
     }
 
     public function crawlPage(array $request): array
@@ -25,8 +34,10 @@ class CommentController
             'xpath_comment_author_expression' => $request['comment_author_expression'],
         ];
 
+        $crawlerService = $this->crawlerServiceFactory->getInstance($request['type']);
+        
         /** @var Comment[] $comments */
-        $comments = $this->crawlerService->crawl($request['url'], $config);
+        $comments = $crawlerService->crawl($request['url'], $config);
 
         echo "Автор третьего комментария:".$comments[2]->getAuthor();
         

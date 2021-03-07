@@ -1,26 +1,35 @@
 <?php
 
-require_once __DIR__.'/vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
 use MyApp\Controller\CommentController;
-use MyApp\Service\ForumCrawlerService;
+use MyApp\Service\CrawlerServiceFactory;
 use MyApp\Service\FileStorageService;
 
+if ($_POST['type'] == 'forum') {
+    if ($_POST['comment_text_expression'][0] != '.') {
+        $_POST['comment_text_expression'] = '.' . $_POST['comment_text_expression'];
+    }
 
-if ($_POST['comment_text_expression'][0] != '.') {
-    $_POST['comment_text_expression'] = '.'.$_POST['comment_text_expression']; 
+    if ($_POST['comment_author_expression'][0] != '.') {
+        $_POST['comment_author_expression'] = '.' . $_POST['comment_author_expression'];
+    }
+
+    $request = [
+        'url' => $_POST['url'],
+        'comment_expression' => $_POST['comment_expression'],
+        'comment_text_expression' => $_POST['comment_text_expression'],
+        'comment_author_expression' => $_POST['comment_author_expression'],
+        'type' => $_POST['type']
+    ];
 }
 
-if ($_POST['comment_author_expression'][0] != '.') {
-    $_POST['comment_author_expression'] = '.'.$_POST['comment_author_expression']; 
+if ($_POST['type'] == 'reddit') {
+    $request = [
+        'url' => $_POST['url'],        
+        'type' => $_POST['type']
+    ];
 }
-
-$request = [
-    'url' => $_POST['url'],
-    'comment_expression' => $_POST['comment_expression'],
-    'comment_text_expression' => $_POST['comment_text_expression'],
-    'comment_author_expression' => $_POST['comment_author_expression']
-];
 
 // ТЕСТОВЫЕ ДАННЫЕ
 
@@ -31,6 +40,13 @@ $request = [
 //     'comment_author_expression' => './/big[starts-with(@class,"mtauthor-nickname userid")]//a[starts-with(@class,"_name")]',
 // ];
 
-$controller = new CommentController(new ForumCrawlerService(), new FileStorageService());
+$controller = new CommentController(new CrawlerServiceFactory, new FileStorageService());
 
-$result = $controller->crawlPage($request);
+if ($_POST['type'] === 'forum') {
+    $result = $controller->crawlPage($request);
+}
+
+if ($_POST['type'] === 'reddit') {
+    $result = $controller->crawlRedditPage($request);
+}
+
