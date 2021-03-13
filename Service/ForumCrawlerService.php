@@ -15,10 +15,18 @@ class ForumCrawlerService implements CrawlerServiceInterface
         
         @$domDoc->loadHTMLFile($url);                     
         
-        $commentExpression = $config['xpath_comment_expression'];
+        $commentExpression = $config['comment_expression'];
         
-        $commentTextExpression = $config['xpath_comment_text_expression'];
-        $commentAuthorExpression = $config['xpath_comment_author_expression'];
+        $commentTextExpression = $config['comment_text_expression'];
+        $commentAuthorExpression = $config['comment_author_expression'];
+
+        if ($commentTextExpression[0] !== '.') {
+            $commentTextExpression = '.' . $commentTextExpression;
+        }
+
+        if ($commentAuthorExpression[0] !== '.') {
+            $commentAuthorExpression = '.' . $commentAuthorExpression;
+        }
 
         $xpath = new \DomXpath($domDoc);
 

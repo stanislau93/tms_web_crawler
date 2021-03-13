@@ -8,7 +8,10 @@ class RedditCrawlerService implements CrawlerServiceInterface
 {
     public function crawl(string $url, array $config): array
     {
-        $url .= '.json';
+        if (substr($url, -5) !== '.json') {
+            $url .= '.json';
+        }
+
         $resource = curl_init();
         curl_setopt($resource, CURLOPT_URL, $url);
         curl_setopt($resource, CURLOPT_RETURNTRANSFER, 1);
@@ -24,7 +27,7 @@ class RedditCrawlerService implements CrawlerServiceInterface
 
         foreach ($result[1]['data']['children'] as $element) {
             if (!isset($element['data']['author'])) {
-                break;
+                continue;
             }
 
             $comment = new Comment();
