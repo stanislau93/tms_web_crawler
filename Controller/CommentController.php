@@ -17,27 +17,12 @@ class CommentController
         $this->fileStorage = $fileStorage;
     }
 
-    public function crawlRedditPage(array $request)
+    public function crawlPage(): array
     {
-        $crawlerService = $this->crawlerServiceFactory->getInstance($request['type']);
-        $comments = $crawlerService->crawl($request['url'], $request);
-
-        $result = $this->fileStorage->storeComments($comments);
-        echo 'Сделано!';
-    }
-
-    public function crawlPage(array $request): array
-    {
-        $config = [
-            'xpath_comment_expression' => $request['comment_expression'],
-            'xpath_comment_text_expression' => $request['comment_text_expression'],
-            'xpath_comment_author_expression' => $request['comment_author_expression'],
-        ];
-
-        $crawlerService = $this->crawlerServiceFactory->getInstance($request['type']);
+        $crawlerService = $this->crawlerServiceFactory->getInstance($_POST['type']);
         
         /** @var Comment[] $comments */
-        $comments = $crawlerService->crawl($request['url'], $config);
+        $comments = $crawlerService->crawl($_POST['url'], $_POST);
 
         echo "Автор третьего комментария:".$comments[2]->getAuthor();
         

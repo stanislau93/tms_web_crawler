@@ -4,7 +4,6 @@ namespace MyApp\Service;
 
 use RuntimeException;
 
-
 class CrawlerServiceFactory
 {
     private const CRAWL_FORUM_TYPE = 'forum';
@@ -14,9 +13,9 @@ class CrawlerServiceFactory
     {
         switch ($type) {
             case self::CRAWL_FORUM_TYPE:
-                return new ForumCrawlerService;
+                return new ForumCrawlerService();
             case self::CRAWL_REDDIT_TYPE:
-                return new RedditCrawlerService;
+                return new RedditCrawlerService();
             default:
                 throw new RuntimeException('unrecognized type');
         }
