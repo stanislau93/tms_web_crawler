@@ -37,7 +37,7 @@
 }
 
 /* button LogOut */
-.btn {
+.btn, .btn_register {
 	text-decoration: none;
 	display: inline-block;
     padding: 10px 30px;
@@ -52,6 +52,7 @@
     color: #fe6637;
     transition: .2s ease-in-out;
 }
+
 .btn:before {
     content: "";
     background: linear-gradient(90deg, rgba(255, 255, 255, .1), rgba(255, 255, 255, .5));
