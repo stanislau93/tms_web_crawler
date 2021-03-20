@@ -25,12 +25,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (empty($errors)) {
         $salt = base64_encode(random_bytes(12));
 
-        $hash = password_hash($pwd.$salt.PEPPER, PASSWORD_BCRYPT);
+        $hash = password_hash($pwd . $salt . PEPPER, PASSWORD_BCRYPT);
 
         $f = fopen('users', 'w+');
-        fwrite($f, $uname.' '.$hash.' '.$salt.PHP_EOL);
+        fwrite($f, $uname . ' ' . $hash . ' ' . $salt . PHP_EOL);
         fclose($f);
-        
+
         # изменить айди сессии - для безопасности
         # а также уничтожь предыдущую сессию (это не обязательно)
         session_regenerate_id();
@@ -82,9 +82,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <div class="errors">
         <?php
+        if (!empty($errors)) {
             foreach ($errors as $error) {
                 echo "<p>$error</p>";
             }
+        }
         ?>
     </div>
 
