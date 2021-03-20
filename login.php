@@ -30,12 +30,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     if (empty($_SESSION['errors'])) {
-        $usersTable = mb_substr(file_get_contents('users'),0,-1);
-
+        $usersTable = mb_substr(file_get_contents('users'),0,-2);
+        
         $usersEntries = array_map(
             function (string $s) {
                 $parts = explode(' ', $s);
-                var_dump("P", $parts);
                 return [
                     'username' => $parts[0],
                     'hash' => $parts[1],
@@ -48,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         foreach ($usersEntries as $entry) {
             if ($entry['username'] === $unameFromInput) {
                 $fullPassword = $pwdFromInput.$entry['salt'].PEPPER;
-
+                
                 $passwordCorrect = password_verify($fullPassword, $entry['hash']);
 
                 if ($passwordCorrect) {
