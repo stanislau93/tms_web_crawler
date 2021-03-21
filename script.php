@@ -4,9 +4,10 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 use MyApp\Controller\CommentController;
 use MyApp\Service\CrawlerServiceFactory;
+use MyApp\Service\DataBaseStorageService;
 use MyApp\Service\FileStorageService;
 
-$controller = new CommentController(new CrawlerServiceFactory(), new FileStorageService());
+$controller = new CommentController(new CrawlerServiceFactory(), new FileStorageService(), new DataBaseStorageService());
 // $result = $controller->crawlPage();
 
 // ТЕСТОВЫЕ ДАННЫЕ

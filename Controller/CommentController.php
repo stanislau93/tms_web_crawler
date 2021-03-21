@@ -10,11 +10,13 @@ class CommentController
 {
     private CrawlerServiceFactory $crawlerServiceFactory;
     private StorageServiceInterface $fileStorage;
+    private StorageServiceInterface $baseStorage;
 
-    public function __construct(CrawlerServiceFactory $crawlerServiceFactory, StorageServiceInterface $fileStorage)
+    public function __construct(CrawlerServiceFactory $crawlerServiceFactory, StorageServiceInterface $fileStorage, StorageServiceInterface $baseStorage)
     {
         $this->crawlerServiceFactory = $crawlerServiceFactory;
         $this->fileStorage = $fileStorage;
+        $this->baseStorage = $baseStorage;
     }
 
     public function crawlPage(): array
@@ -28,6 +30,7 @@ class CommentController
         
         try {
             $result = $this->fileStorage->storeComments($comments);
+            $result = $this->baseStorage->storeComments($comments);
         } catch (Throwable $e) {
             echo '<br>';
             echo 'Ошибка: ' . $e->getMessage();
