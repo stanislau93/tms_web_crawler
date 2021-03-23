@@ -1,10 +1,27 @@
 <?php
 
+const QUEUE_URL = 'http://localhost:8888/';
+
+$postSuccess = false;
+
 session_start();
 
 if (!isset($_SESSION['identity'])) {
     header('Location: /login.php');
     die();
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $resource = curl_init();
+
+    curl_setopt($resource, CURLOPT_URL, QUEUE_URL);
+    curl_setopt($resource, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($resource, CURLOPT_POSTFIELDS, $_POST);
+
+    $result = curl_exec($resource);
+
+    curl_close($resource);
+    $postSuccess = $result;
 }
 
 ?>
@@ -19,8 +36,13 @@ if (!isset($_SESSION['identity'])) {
 </head>
 
 <body>
+    <?php
+        if ($postSuccess) {
+            echo "<p>POST SUCCESS!</p>";
+        }
+    ?>
     <div class="wrapper-form">
-        <form method="POST" action="script.php">
+        <form method="POST" action="index.php">
             <div class="form_radio_btn">
                 <input id="radio-1" type="radio" name="type" value="forum" class="buttonForum">
                 <label for="radio-1">Forum</label>

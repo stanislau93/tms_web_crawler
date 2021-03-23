@@ -17,12 +17,12 @@ class CommentController
         $this->fileStorage = $fileStorage;
     }
 
-    public function crawlPage(): array
+    public function crawlPage($config): array
     {
-        $crawlerService = $this->crawlerServiceFactory->getInstance($_POST['type']);
+        $crawlerService = $this->crawlerServiceFactory->getInstance($config['type']);
         
         /** @var Comment[] $comments */
-        $comments = $crawlerService->crawl($_POST['url'], $_POST);
+        $comments = $crawlerService->crawl($config['url'], $config);
 
         echo "Автор третьего комментария:".$comments[2]->getAuthor();
         
